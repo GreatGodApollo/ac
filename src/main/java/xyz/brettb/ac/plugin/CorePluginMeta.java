@@ -1,4 +1,6 @@
-package xyz.brettb.core.commands;
+package xyz.brettb.ac.plugin;
+
+import org.bukkit.ChatColor;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -7,7 +9,7 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface CorePluginCommandPermission {
-    String value();
-    boolean isOpExempt() default true;
+public @interface CorePluginMeta {
+    String chatPrefix();
+    ChatColor chatPrefixColor();
 }

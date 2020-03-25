@@ -1,0 +1,5 @@
+main: xyz.brettb.ac.ac
+
+name: ${project.name}
+version: ${project.version}
+author: GreatGodApollo

@@ -1,4 +1,4 @@
-package xyz.brettb.core.plugin;
+package xyz.brettb.ac.plugin;
 
 import lombok.Data;
 import lombok.NonNull;

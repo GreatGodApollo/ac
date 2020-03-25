@@ -1,4 +1,4 @@
-package xyz.brettb.core.commands;
+package xyz.brettb.ac.commands;
 
 import com.google.common.collect.ImmutableList;
 import lombok.AccessLevel;
@@ -8,8 +8,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.*;
 import org.bukkit.entity.Player;
-import xyz.brettb.core.plugin.CorePlugin;
-import xyz.brettb.core.util.RunnableShorthand;
+import xyz.brettb.ac.plugin.CorePlugin;
+import xyz.brettb.ac.util.RunnableShorthand;
 
 import java.util.*;
 
@@ -70,7 +70,7 @@ public abstract class CorePluginCommand implements CommandExecutor, TabCompleter
                 }
                 String s = builder.toString();
                 sender.sendMessage(plugin.getChatPrefix() + ChatColor.DARK_AQUA + " /" +
-                        superHelpCommand.getFormattedName() + ChatColor.YELLOW + " - [" +
+                        superHelpCommand.getFormattedName() + ChatColor.YELLOW + " [" +
                         s.substring(0, s.length() - 1) + "]");
             }
         });
@@ -82,7 +82,15 @@ public abstract class CorePluginCommand implements CommandExecutor, TabCompleter
 
             if (getClass().isAnnotationPresent(CorePluginCommandPermission.class)) {
                 CorePluginCommandPermission annotation = getClass().getAnnotation(CorePluginCommandPermission.class);
-                if (!sender.hasPermission(annotation.value()) && !(sender.isOp() && annotation.isOpExempt())) throw new PermissionException("You do not have permission for this command!");
+                if (sender instanceof Player) {
+                    Player player = (Player) sender;
+                    if (!player.hasPermission(annotation.value())
+                            && !(player.isOp() && annotation.isOpExempt())
+                            && Arrays.stream(annotation.userOverrides()).noneMatch(player.getUniqueId()::equals))
+                        throw new PermissionException("You do not have permission for this command!");
+                } else if (!sender.hasPermission(annotation.value())
+                        && !(sender.isOp() && annotation.isOpExempt()))
+                    throw new PermissionException("You do not have permission for this command!");
             }
 
             if (isUsingSubCommandsOnly()) {

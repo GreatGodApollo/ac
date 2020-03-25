@@ -1,4 +1,4 @@
-package xyz.brettb.core.commands;
+package xyz.brettb.ac.commands;
 
 import lombok.Getter;
 import org.bukkit.command.CommandException;

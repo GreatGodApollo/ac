@@ -1,4 +1,4 @@
-package xyz.brettb.core.commands;
+package xyz.brettb.ac.commands;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -7,4 +7,8 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface AsyncCommand {}
+public @interface CorePluginCommandPermission {
+    String value();
+    boolean isOpExempt() default true;
+    String[] userOverrides() default {};
+}

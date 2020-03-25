@@ -1,4 +1,4 @@
-package xyz.brettb.core.items;
+package xyz.brettb.ac.items;
 
 import lombok.NonNull;
 import me.ialistannen.mininbt.ItemNBTUtil;

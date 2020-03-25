@@ -1,4 +1,4 @@
-package xyz.brettb.core.plugin;
+package xyz.brettb.ac.plugin;
 
 import lombok.NonNull;
 import org.bukkit.Bukkit;
@@ -9,8 +9,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-import xyz.brettb.core.commands.CorePluginCommand;
-import xyz.brettb.core.commands.CorePluginCommandMeta;
+import xyz.brettb.ac.commands.CorePluginCommand;
+import xyz.brettb.ac.commands.CorePluginCommandMeta;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;

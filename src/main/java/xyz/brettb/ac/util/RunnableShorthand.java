@@ -1,4 +1,4 @@
-package xyz.brettb.core.util;
+package xyz.brettb.ac.util;
 
 import lombok.RequiredArgsConstructor;
 import org.bukkit.plugin.java.JavaPlugin;
