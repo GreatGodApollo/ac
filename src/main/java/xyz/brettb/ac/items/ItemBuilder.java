@@ -22,8 +22,14 @@ public class ItemBuilder {
     }
 
     public static ItemBuilder of(@NonNull Material mat) {
-        Objects.requireNonNull(mat);
         return of(new ItemStack(mat));
+    }
+
+    public static ItemBuilder of(@NonNull CoreMaterial mat) {
+        if (mat.parseItem(true) == null) {
+            return of(new ItemStack(Material.STONE));
+        }
+        return of(new ItemStack(Objects.requireNonNull(mat.parseItem(true))));
     }
 
     public static ItemBuilder of(@NonNull ItemStack itemStack) {
