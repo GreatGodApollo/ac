@@ -19,7 +19,7 @@ This library aims to make writing a plugin quicker and easier.
 <dependency>
     <groupId>xyz.brettb</groupId>
     <artifactId>ac</artifactId>
-    <version>1.0.0</version>
+    <version>1.1.0</version>
     <scope>provided</scope>
 </dependency>
 ```
@@ -34,7 +34,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly group: 'xyz.brettb', name: 'ac', version: '1.0.0'
+    compileOnly group: 'xyz.brettb', name: 'ac', version: '1.1.0'
 }
 ```
 
