@@ -21,6 +21,8 @@ public abstract class CorePluginCommand implements CommandExecutor, TabCompleter
     @Setter(AccessLevel.PROTECTED) @Getter private CorePluginCommand superCommand = null;
     @Getter private CorePluginCommandMeta commandMeta = getClass().isAnnotationPresent(CorePluginCommandMeta.class)
             ? getClass().getAnnotation(CorePluginCommandMeta.class) : null;
+    @Getter private CorePluginCommandPermission commandPermission = getClass().isAnnotationPresent(CorePluginCommandPermission.class)
+            ? getClass().getAnnotation(CorePluginCommandPermission.class) : null;
     @Setter private CorePlugin plugin;
 
     protected CorePluginCommand(String name) {
@@ -79,17 +81,15 @@ public abstract class CorePluginCommand implements CommandExecutor, TabCompleter
     public final boolean onCommand(final CommandSender sender, Command command, String s, final String[] args) {
         try {
             CorePluginCommand subCommand = null;
-
-            if (getClass().isAnnotationPresent(CorePluginCommandPermission.class)) {
-                CorePluginCommandPermission annotation = getClass().getAnnotation(CorePluginCommandPermission.class);
+            if (commandPermission != null) {
                 if (sender instanceof Player) {
                     Player player = (Player) sender;
-                    if (!player.hasPermission(annotation.value())
-                            && !(player.isOp() && annotation.isOpExempt())
-                            && Arrays.stream(annotation.userOverrides()).noneMatch(player.getUniqueId()::equals))
+                    if (!player.hasPermission(commandPermission.value())
+                            && !(player.isOp() && commandPermission.isOpExempt())
+                            && !(Arrays.asList(commandPermission.userOverrides()).contains(player.getUniqueId().toString())))
                         throw new PermissionException("You do not have permission for this command!");
-                } else if (!sender.hasPermission(annotation.value())
-                        && !(sender.isOp() && annotation.isOpExempt()))
+                } else if (!sender.hasPermission(commandPermission.value())
+                        && !(sender.isOp() && commandPermission.isOpExempt()))
                     throw new PermissionException("You do not have permission for this command!");
             }
 
