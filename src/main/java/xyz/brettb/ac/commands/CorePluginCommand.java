@@ -8,6 +8,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.*;
 import org.bukkit.entity.Player;
+import org.javatuples.Pair;
 import xyz.brettb.ac.plugin.CorePlugin;
 import xyz.brettb.ac.util.RunnableShorthand;
 
@@ -15,7 +16,8 @@ import java.util.*;
 
 public abstract class CorePluginCommand implements CommandExecutor, TabCompleter {
 
-    private final Map<String, CorePluginCommand> subCommands = new HashMap<String, CorePluginCommand>();
+    // name, Pair<Command,Alias?>
+    private final Map<String, Pair<CorePluginCommand,Boolean>> subCommands = new HashMap<>();
 
     @Getter private final String name;
     @Setter(AccessLevel.PROTECTED) @Getter private CorePluginCommand superCommand = null;
@@ -37,11 +39,11 @@ public abstract class CorePluginCommand implements CommandExecutor, TabCompleter
     public final void registerSubCommand(CorePluginCommand... subCommands) {
         for (CorePluginCommand subCommand : subCommands) {
             if (subCommand.getSuperCommand() != null) throw new IllegalArgumentException("The command you attempted to register has already been assigned a super command!");
-            this.subCommands.put(subCommand.getName(), subCommand);
+            this.subCommands.put(subCommand.getName(), Pair.with(subCommand,false));
             CorePluginCommandMeta meta = subCommand.getCommandMeta();
             if (meta != null && !Arrays.equals(meta.aliases(), new String[]{}))
                 for (String a : meta.aliases())
-                    this.subCommands.put(a, subCommand);
+                    this.subCommands.put(a, Pair.with(subCommand,true));
             subCommand.setSuperCommand(this);
         }
         regenerateHelpCommand();
@@ -56,15 +58,26 @@ public abstract class CorePluginCommand implements CommandExecutor, TabCompleter
     }
 
     public final ImmutableList<CorePluginCommand> getSubCommands() {
-        return ImmutableList.copyOf(this.subCommands.values());
+        ArrayList<CorePluginCommand> subC = new ArrayList<>();
+        for (Map.Entry<String, Pair<CorePluginCommand,Boolean>> entry : this.subCommands.entrySet()) {
+            if (!entry.getValue().getValue1()) {
+                subC.add(entry.getValue().getValue0());
+            }
+        }
+        return ImmutableList.copyOf(subC);
     }
 
     private void regenerateHelpCommand() {
         if (!shouldGenerateHelpCommand()) return;
-        final Map<String, CorePluginCommand> subCommands = this.subCommands;
-        final TreeMap<String, CorePluginCommand> sortedSubCommands = new TreeMap<>(subCommands);
+        final Map<String, Pair<CorePluginCommand,Boolean>> subCommands = this.subCommands;
+        final TreeMap<String, CorePluginCommand> sortedSubCommands = new TreeMap<>();
+        for (Map.Entry<String, Pair<CorePluginCommand,Boolean>> entry : this.subCommands.entrySet()) {
+            if (!entry.getValue().getValue1()) {
+                sortedSubCommands.put(entry.getKey(),entry.getValue().getValue0());
+            }
+        }
         final CorePluginCommand superHelpCommand = this;
-        this.subCommands.put("help", new CorePluginCommand("help") {
+        this.subCommands.put("help", Pair.with(new CorePluginCommand("help") {
             @Override
             public void handleCommandUnspecific(CommandSender sender, String[] args) {
                 StringBuilder builder = new StringBuilder();
@@ -77,7 +90,7 @@ public abstract class CorePluginCommand implements CommandExecutor, TabCompleter
                 String s = builder.toString();
                 sender.sendMessage(plugin.getChatPrefix() + s);
             }
-        });
+        }, false));
     }
 
     public final boolean onCommand(final CommandSender sender, Command command, String s, final String[] args) {
@@ -173,9 +186,9 @@ public abstract class CorePluginCommand implements CommandExecutor, TabCompleter
     protected void preSubCommandDispatch(CommandSender sender, String[] args, CorePluginCommand subCommand) {}
 
     public final CorePluginCommand getSubCommandFor(String s) {
-        if (subCommands.containsKey(s)) return subCommands.get(s);
+        if (subCommands.containsKey(s)) return subCommands.get(s).getValue0();
         for (String s1 : subCommands.keySet()) {
-            if (s1.equalsIgnoreCase(s)) return subCommands.get(s1);
+            if (s1.equalsIgnoreCase(s)) return subCommands.get(s1).getValue0();
         }
         return null;
     }
