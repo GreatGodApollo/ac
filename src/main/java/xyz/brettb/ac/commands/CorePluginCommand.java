@@ -62,18 +62,20 @@ public abstract class CorePluginCommand implements CommandExecutor, TabCompleter
     private void regenerateHelpCommand() {
         if (!shouldGenerateHelpCommand()) return;
         final Map<String, CorePluginCommand> subCommands = this.subCommands;
+        final TreeMap<String, CorePluginCommand> sortedSubCommands = new TreeMap<>(subCommands);
         final CorePluginCommand superHelpCommand = this;
         this.subCommands.put("help", new CorePluginCommand("help") {
             @Override
             public void handleCommandUnspecific(CommandSender sender, String[] args) {
                 StringBuilder builder = new StringBuilder();
-                for (Map.Entry<String, CorePluginCommand> commandEntry : subCommands.entrySet()) {
-                    builder.append(commandEntry.getKey()).append("|");
+                builder.append(ChatColor.GOLD).append(" Help for ").append(ChatColor.GREEN).append("/")
+                        .append(superHelpCommand.getFormattedName()).append("\n");
+                for (Map.Entry<String, CorePluginCommand> commandEntry : sortedSubCommands.entrySet()) {
+                    builder.append(ChatColor.DARK_AQUA).append("> ").append(ChatColor.GREEN).append("/")
+                            .append(commandEntry.getValue().getFormattedName()).append("\n");
                 }
                 String s = builder.toString();
-                sender.sendMessage(plugin.getChatPrefix() + ChatColor.DARK_AQUA + " /" +
-                        superHelpCommand.getFormattedName() + ChatColor.YELLOW + " [" +
-                        s.substring(0, s.length() - 1) + "]");
+                sender.sendMessage(plugin.getChatPrefix() + s);
             }
         });
     }

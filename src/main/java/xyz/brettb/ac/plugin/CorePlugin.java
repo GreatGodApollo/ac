@@ -96,7 +96,7 @@ public abstract class CorePlugin extends JavaPlugin {
     public String getChatPrefix() {
         CorePluginMeta annotation = this.getClass().getAnnotation(CorePluginMeta.class);
         if (annotation != null) {
-            return annotation.chatPrefixColor() + annotation.chatPrefix();
+            return ChatColor.translateAlternateColorCodes('&', annotation.chatPrefix());
         }
         return ChatColor.AQUA + "[PL]";
     }
