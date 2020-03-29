@@ -93,11 +93,7 @@ public abstract class CorePlugin extends JavaPlugin {
         return listener;
     }
 
-    public String getChatPrefix() {
-        CorePluginMeta annotation = this.getClass().getAnnotation(CorePluginMeta.class);
-        if (annotation != null) {
-            return ChatColor.translateAlternateColorCodes('&', annotation.chatPrefix());
-        }
-        return ChatColor.AQUA + "[PL]";
-    }
+    public String getChatPrefix() {return this.getClass().getAnnotation(CorePluginMeta.class) == null
+            ? ChatColor.translateAlternateColorCodes('&', "&l&8[&bPLUGIN&8]&r")
+            : ChatColor.translateAlternateColorCodes('&',this.getClass().getAnnotation(CorePluginMeta.class).chatPrefix());}
 }

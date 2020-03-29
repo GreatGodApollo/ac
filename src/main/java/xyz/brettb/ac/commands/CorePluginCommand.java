@@ -45,6 +45,7 @@ public abstract class CorePluginCommand implements CommandExecutor, TabCompleter
                 for (String a : meta.aliases())
                     this.subCommands.put(a, Pair.with(subCommand,true));
             subCommand.setSuperCommand(this);
+            subCommand.setPlugin(this.plugin);
         }
         regenerateHelpCommand();
     }
@@ -79,21 +80,25 @@ public abstract class CorePluginCommand implements CommandExecutor, TabCompleter
         final CorePluginCommand superHelpCommand = this;
         this.subCommands.put("help", Pair.with(new CorePluginCommand("help") {
             @Override
-            public void handleCommandUnspecific(CommandSender sender, String[] args) {
+            public void handleCommandUnspecific(CommandContext ctx) {
                 StringBuilder builder = new StringBuilder();
                 builder.append(ChatColor.GOLD).append(" Help for ").append(ChatColor.GREEN).append("/")
                         .append(superHelpCommand.getFormattedName()).append("\n");
+                if (!superHelpCommand.isUsingSubCommandsOnly()) {
+                    builder.append(ChatColor.DARK_AQUA).append("> ").append(ChatColor.GREEN).append("/")
+                            .append(superHelpCommand.getFormattedName()).append("\n");
+                }
                 for (Map.Entry<String, CorePluginCommand> commandEntry : sortedSubCommands.entrySet()) {
                     builder.append(ChatColor.DARK_AQUA).append("> ").append(ChatColor.GREEN).append("/")
                             .append(commandEntry.getValue().getFormattedName()).append("\n");
                 }
                 String s = builder.toString();
-                sender.sendMessage(plugin.getChatPrefix() + s);
+                ctx.getSender().sendMessage(superHelpCommand.getPlugin().getChatPrefix() + s);
             }
         }, false));
     }
 
-    public final boolean onCommand(final CommandSender sender, Command command, String s, final String[] args) {
+    public final boolean onCommand(final CommandSender sender, Command command, String alias, final String[] args) {
         try {
             CorePluginCommand subCommand = null;
             if (commandPermission != null) {
@@ -118,7 +123,7 @@ public abstract class CorePluginCommand implements CommandExecutor, TabCompleter
             if (subCommand != null) {
                 String[] choppedArgs = args.length < 2 ? new String[0] : Arrays.copyOfRange(args, 1, args.length);
                 preSubCommandDispatch(sender, choppedArgs, subCommand);
-                subCommand.onCommand(sender, command, s, choppedArgs);
+                subCommand.onCommand(sender, command, alias, choppedArgs);
                 try {
                     handlePostSubCommand(sender, args);
                 } catch (EmptyHandlerException ignored) {}
@@ -129,7 +134,7 @@ public abstract class CorePluginCommand implements CommandExecutor, TabCompleter
             if (getClass().isAnnotationPresent(AsyncCommand.class))
                 RunnableShorthand.forPlugin(plugin).async().with(() -> {
                     try {
-                        actualDispatch(sender, args);
+                        actualDispatch(sender, alias, args);
                     } catch (CommandException e) {
                         handleCommandException(e, args, sender);
                     } catch (Exception e) {
@@ -137,7 +142,7 @@ public abstract class CorePluginCommand implements CommandExecutor, TabCompleter
                     }
                 }).go();
             else
-                actualDispatch(sender, args);
+                actualDispatch(sender, alias, args);
         }
         catch (CommandException ex) {
             handleCommandException(ex, args, sender);
@@ -147,13 +152,14 @@ public abstract class CorePluginCommand implements CommandExecutor, TabCompleter
         return true;
     }
 
-    private void actualDispatch(CommandSender sender, String[] args) throws CommandException {
+    private void actualDispatch(CommandSender sender, String alias, String[] args) throws CommandException {
+        CommandContext ctx = CommandContext.with(sender, alias, args);
         try {
-            if (sender instanceof Player) handleCommand(((Player) sender), args);
-            else if (sender instanceof ConsoleCommandSender) handleCommand((ConsoleCommandSender)sender, args);
-            else if (sender instanceof BlockCommandSender)  handleCommand((BlockCommandSender)sender, args);
+            if (sender instanceof Player) handleCommandPlayer(ctx);
+            else if (sender instanceof ConsoleCommandSender) handleCommandConsole(ctx);
+            else if (sender instanceof BlockCommandSender)  handleCommandBlock(ctx);
         } catch (EmptyHandlerException e) {
-            handleCommandUnspecific(sender, args);
+            handleCommandUnspecific(ctx);
         }
     }
 
@@ -214,11 +220,11 @@ public abstract class CorePluginCommand implements CommandExecutor, TabCompleter
         return plugin;
     }
 
-    protected void handleCommand(Player player, String[] args) throws CommandException {throw new EmptyHandlerException();}
-    protected void handleCommand(ConsoleCommandSender commandSender, String[] args) throws CommandException {throw new EmptyHandlerException();}
-    protected void handleCommand(BlockCommandSender commandSender, String[] args) throws CommandException {throw new EmptyHandlerException();}
+    protected void handleCommandPlayer(CommandContext context) throws CommandException {throw new EmptyHandlerException();}
+    protected void handleCommandConsole(CommandContext context) throws CommandException {throw new EmptyHandlerException();}
+    protected void handleCommandBlock(CommandContext context) throws CommandException {throw new EmptyHandlerException();}
 
-    protected void handleCommandUnspecific(CommandSender sender, String[] args) throws CommandException {throw new EmptyHandlerException();}
+    protected void handleCommandUnspecific(CommandContext context) throws CommandException {throw new EmptyHandlerException();}
     protected void handlePostSubCommand(CommandSender sender, String[] args) throws CommandException {throw new EmptyHandlerException();}
 
     protected List<String> handleTabComplete(CommandSender sender, Command command, String alias, String[] args) {

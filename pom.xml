@@ -6,7 +6,7 @@
 
     <groupId>xyz.brettb</groupId>
     <artifactId>ac</artifactId>
-    <version>1.4.0</version>
+    <version>0.6.0</version>
     <name>ApolloCore</name>
 
     <properties>
