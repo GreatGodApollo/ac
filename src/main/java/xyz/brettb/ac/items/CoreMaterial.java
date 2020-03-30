@@ -37,7 +37,6 @@ import java.util.regex.Pattern;
  * Taken From: https://github.com/CryptoMorin/XSeries/blob/master/src/main/java/com/cryptomorin/xseries/XMaterial.java
  *
  * @author Brett Bender
- * @version 1.1.0
  * @see Material
  * @see ItemStack
  */
@@ -1075,7 +1074,6 @@ public enum CoreMaterial {
      * An immutable cached set of {@link CoreMaterial#values()} to avoid allocating memory for
      * calling the method every time.
      *
-     * @since 1.1.0
      */
     public static final EnumSet<CoreMaterial> VALUES = EnumSet.allOf(CoreMaterial.class);
     /**
@@ -1084,7 +1082,6 @@ public enum CoreMaterial {
      * Most of the names are not complete as this list is intended to be
      * checked with {@link String#contains} for memory usage.
      *
-     * @since 1.1.0
      */
     private static final ImmutableSet<String> DAMAGEABLE = ImmutableSet.of(
             "HELMET", "CHESTPLATE", "LEGGINGS", "BOOTS",
@@ -1101,7 +1098,6 @@ public enum CoreMaterial {
      * <br>
      * Duplicates are normally only checked by keys, not values.
      *
-     * @since 1.1.0
      */
     @SuppressWarnings("UnstableApiUsage")
     private static final ImmutableMap<CoreMaterial, CoreMaterial> DUPLICATED = Maps.immutableEnumMap(ImmutableMap.<CoreMaterial, CoreMaterial>builder()
@@ -1135,7 +1131,6 @@ public enum CoreMaterial {
      * Guava (Google Core Libraries for Java)'s cache for performance and timed caches.
      * For strings that match a certain CoreMaterial. Mostly cached for configs.
      *
-     * @since 1.1.0
      */
     private static final Cache<String, CoreMaterial> NAME_CACHE = CacheBuilder.newBuilder()
             .softValues()
@@ -1145,7 +1140,6 @@ public enum CoreMaterial {
      * Guava (Google Core Libraries for Java)'s cache for performance and timed caches.
      * For CoreMaterials that are already parsed once.
      *
-     * @since 1.1.0
      */
     private static final Cache<CoreMaterial, Optional<Material>> PARSED_CACHE = CacheBuilder.newBuilder()
             .softValues()
@@ -1157,20 +1151,17 @@ public enum CoreMaterial {
      * Pre-compiled RegEx pattern.
      * Include both replacements to avoid recreating string multiple times with multiple RegEx checks.
      *
-     * @since 1.1.0
      */
     private static final Pattern FORMAT_PATTERN = Pattern.compile("\\W+");
     /**
      * The current version of the server in the a form of a major version.
      *
-     * @since 1.1.0
      */
     private static final int VERSION = Integer.parseInt(getMajorVersion(Bukkit.getVersion()).substring(2));
     /**
      * Cached result if the server version is after the v1.13 flattening update.
      * Please don't mistake this with flat-chested people. It happened.
      *
-     * @since 1.1.0
      */
     private static final boolean ISFLAT = supports(13);
     /**
@@ -1210,7 +1201,6 @@ public enum CoreMaterial {
      * @return true if 1.13 or higher.
      * @see #getVersion()
      * @see #supports(int)
-     * @since 1.1.0
      */
     public static boolean isNewVersion() {
         return ISFLAT;
@@ -1228,7 +1218,6 @@ public enum CoreMaterial {
      * {@link #getVersion()} == 1.8
      * </blockquote>
      *
-     * @since 1.1.0
      */
     public static boolean isOneEight() {
         return !supports(9);
@@ -1239,7 +1228,6 @@ public enum CoreMaterial {
      *
      * @return the current server version or 0.0 if unknown.
      * @see #isNewVersion()
-     * @since 1.1.0
      */
     public static double getVersion() {
         return VERSION;
@@ -1250,7 +1238,6 @@ public enum CoreMaterial {
      * to find the old material name with its data value using a cached search for optimization.
      *
      * @see #matchDefinedCoreMaterial(String, byte)
-     * @since 1.1.0
      */
     private static CoreMaterial requestOldCoreMaterial(@NonNull String name, byte data) {
         String holder = name + data;
@@ -1277,7 +1264,6 @@ public enum CoreMaterial {
      *
      * @param name name of the material.
      * @return true if CoreMaterial enum has this material.
-     * @since 1.1.0
      */
     public static boolean contains(@NonNull String name) {
         Validate.notEmpty(name, "Cannot check for null or empty material name");
@@ -1292,7 +1278,6 @@ public enum CoreMaterial {
      * Parses the given material name as an CoreMaterial with unspecified data value.
      *
      * @see #matchCoreMaterial(String, byte)
-     * @since 1.1.0
      */
     @NonNull
     public static Optional<CoreMaterial> matchCoreMaterial(@NonNull String name) {
@@ -1311,7 +1296,6 @@ public enum CoreMaterial {
      *
      * @see #matchDefinedCoreMaterial(String, byte)
      * @see #matchCoreMaterial(ItemStack)
-     * @since 1.1.0
      */
     @NonNull
     public static Optional<CoreMaterial> matchCoreMaterial(@NonNull String name, byte data) {
@@ -1338,7 +1322,6 @@ public enum CoreMaterial {
      * @param name the material string that consists of the material name, data and separator character.
      * @return the parsed CoreMaterial.
      * @see #matchCoreMaterial(String)
-     * @since 1.1.0
      */
     private static Optional<CoreMaterial> matchCoreMaterialWithData(String name) {
         for (char separator : new char[]{',', ':'}) {
@@ -1359,7 +1342,6 @@ public enum CoreMaterial {
      * @throws IllegalArgumentException may be thrown as an unexpected exception.
      * @see #matchDefinedCoreMaterial(String, byte)
      * @see #matchCoreMaterial(ItemStack)
-     * @since 1.1.0
      */
     @NonNull
     public static CoreMaterial matchCoreMaterial(@NonNull Material material) {
@@ -1375,7 +1357,6 @@ public enum CoreMaterial {
      * @return an CoreMaterial if matched any.
      * @throws IllegalArgumentException may be thrown as an unexpected exception.
      * @see #matchDefinedCoreMaterial(String, byte)
-     * @since 1.1.0
      */
     @NonNull
     @SuppressWarnings("deprecation")
@@ -1398,7 +1379,6 @@ public enum CoreMaterial {
      * @see #matchCoreMaterial(Material)
      * @see #matchCoreMaterial(int, byte)
      * @see #matchCoreMaterial(ItemStack)
-     * @since 1.1.0
      */
     @NonNull
     private static Optional<CoreMaterial> matchDefinedCoreMaterial(@NonNull String name, byte data) {
@@ -1432,7 +1412,6 @@ public enum CoreMaterial {
      * @param name the name of the material to check.
      * @return true if there's a duplicated material for this material, otherwise false.
      * @see #isDuplicated()
-     * @since 1.1.0
      */
     public static boolean isDuplicated(@NonNull String name) {
         Validate.notEmpty(name, "Cannot check duplication for null or empty material name");
@@ -1452,7 +1431,6 @@ public enum CoreMaterial {
      * @param data the data value of the material.
      * @return a parsed CoreMaterial with the same ID and data value.
      * @see #matchCoreMaterial(ItemStack)
-     * @since 1.1.0
      */
     @NonNull
     public static Optional<CoreMaterial> matchCoreMaterial(int id, byte data) {
@@ -1471,7 +1449,6 @@ public enum CoreMaterial {
      * @param name the name of the material.
      * @return the duplicated CoreMaterial based on the version.
      * @throws IllegalArgumentException may be thrown. If thrown, it's a bug.
-     * @since 1.1.0
      */
     private static CoreMaterial requestDuplicatedCoreMaterial(@NonNull String name, byte data) {
         CoreMaterial mat = requestOldCoreMaterial(name, data);
@@ -1485,7 +1462,6 @@ public enum CoreMaterial {
      * @param name the name of the material.
      * @return the new CoreMaterial of this duplicated material.
      * @see #getCoreMaterialIfDuplicated(String)
-     * @since 1.1.0
      */
     @NonNull
     public static Optional<CoreMaterial> getNewCoreMaterialIfDuplicated(@NonNull String name) {
@@ -1503,7 +1479,6 @@ public enum CoreMaterial {
      * @param name the name of the material.
      * @return the other CoreMaterial (key or value) of the CoreMaterial (key or value).
      * @see #matchCoreMaterial(String, byte)
-     * @since 1.1.0
      */
     public static CoreMaterial getCoreMaterialIfDuplicated(@NonNull String name) {
         Validate.notEmpty(name, "Cannot get duplicated material for null or empty material name");
@@ -1522,7 +1497,6 @@ public enum CoreMaterial {
      *
      * @param name the material name to modify.
      * @return a Material enum name.
-     * @since 1.1.0
      */
     @NonNull
     private static String format(@NonNull String name) {
@@ -1535,7 +1509,6 @@ public enum CoreMaterial {
      *
      * @param version the major version to be checked. "1." is ignored. E.g. 1.12 = 12 | 1.9 = 9
      * @return true of the version is equal or higher than the current version.
-     * @since 1.1.0
      */
     public static boolean supports(int version) {
         return VERSION >= version;
@@ -1546,7 +1519,6 @@ public enum CoreMaterial {
      *
      * @return a formatted string.
      * @see #toWord(String)
-     * @since 1.1.0
      */
     @NonNull
     public static String toWord(@NonNull Material material) {
@@ -1567,7 +1539,6 @@ public enum CoreMaterial {
      *
      * @param name the name of the enum.
      * @return a cleaned more readable enum name.
-     * @since 1.1.0
      */
     @NonNull
     private static String toWord(@NonNull String name) {
@@ -1579,7 +1550,6 @@ public enum CoreMaterial {
      *
      * @param version Supports {@link Bukkit#getVersion()}, {@link Bukkit#getBukkitVersion()} and normal formats such as "1.14"
      * @return the exact major version.
-     * @since 1.1.0
      */
     @NonNull
     public static String getMajorVersion(@NonNull String version) {
@@ -1609,7 +1579,6 @@ public enum CoreMaterial {
      * @param name the name of the material.
      * @return true of the material can be damaged.
      * @see #isDamageable()
-     * @since 1.1.0
      */
     public static boolean isDamageable(@NonNull String name) {
         Objects.requireNonNull(name, "Material name cannot be null");
@@ -1657,7 +1626,6 @@ public enum CoreMaterial {
      * @param material  the base material to match other materials with.
      * @param materials the material names to check base material on.
      * @return true if one of the given material names is similar to the base material.
-     * @since 1.1.0
      */
     public static boolean isOneOf(@NonNull Material material, List<String> materials) {
         if (materials == null || materials.isEmpty()) return false;
@@ -1689,7 +1657,6 @@ public enum CoreMaterial {
      * If the material doesn't have a version it'll return 0;
      *
      * @return the Minecraft version which tihs material was added in.
-     * @since 1.1.0
      */
     public int getMaterialVersion() {
         if (this.legacy.length == 0) return 0;
@@ -1707,7 +1674,6 @@ public enum CoreMaterial {
      *
      * @param item the item to change its type.
      * @see #parseItem()
-     * @since 1.1.0
      */
     @NonNull
     @SuppressWarnings("deprecation")
@@ -1726,7 +1692,6 @@ public enum CoreMaterial {
      * @param materials the material names to check base material on.
      * @return true if one of the given material names is similar to the base material.
      * @see #isOneOf(Material, List)
-     * @since 1.1.0
      */
     public boolean isOneOf(List<String> materials) {
         Material material = this.parseMaterial();
@@ -1740,7 +1705,6 @@ public enum CoreMaterial {
      *
      * @param name the name to check
      * @return true if it's one of the legacy names.
-     * @since 1.1.0
      */
     private boolean anyMatchLegacy(@NonNull String name) {
         for (String legacy : this.legacy) {
@@ -1756,7 +1720,6 @@ public enum CoreMaterial {
      *
      * @return string of this object.
      * @see #toWord(String)
-     * @since 1.1.0
      */
     @Override
     public String toString() {
@@ -1768,7 +1731,6 @@ public enum CoreMaterial {
      *
      * @return the ID of the material or <b>-1</b> if it's a new block or the material is not supported.
      * @see #matchCoreMaterial(int, byte)
-     * @since 1.1.0
      */
     @SuppressWarnings("deprecation")
     public int getId() {
@@ -1783,7 +1745,6 @@ public enum CoreMaterial {
      * @return true if there is a duplicated name for this material, otherwise false.
      * @see #getCoreMaterialIfDuplicated()
      * @see #isDuplicated(String)
-     * @since 1.1.0
      */
     public boolean isDuplicated() {
         return DUPLICATED.containsKey(this);
@@ -1795,7 +1756,6 @@ public enum CoreMaterial {
      * @return true if the item's name is duplicated, otherwise false.
      * @see #isDuplicated()
      * @see #getNewCoreMaterialIfDuplicated(String)
-     * @since 1.1.0
      */
     public CoreMaterial getCoreMaterialIfDuplicated() {
         return DUPLICATED.get(this);
@@ -1807,7 +1767,6 @@ public enum CoreMaterial {
      *
      * @return true if the item can be damaged (have its durability changed), otherwise false.
      * @see #isDamageable(String)
-     * @since 1.1.0
      */
     public boolean isDamageable() {
         return isDamageable(this.name());
@@ -1820,7 +1779,6 @@ public enum CoreMaterial {
      * or {@link ItemStack#getDurability()} if not damageable.
      *
      * @return data of this material, or 0 if none.
-     * @since 1.1.0
      */
     @SuppressWarnings("deprecation")
     public byte getData() {
@@ -1833,7 +1791,6 @@ public enum CoreMaterial {
      * then the first element will indicate which version the material was added in.
      *
      * @return a list of legacy material names and the first element as the version the material was added in if new.
-     * @since 1.1.0
      */
     @NonNull
     public String[] getLegacy() {
@@ -1847,7 +1804,6 @@ public enum CoreMaterial {
      * @return an ItemStack with the same material (and data value if in older versions.)
      * @see #parseItem(boolean)
      * @see #setType(ItemStack)
-     * @since 1.1.0
      */
     public ItemStack parseItem() {
         return parseItem(false);
@@ -1860,7 +1816,6 @@ public enum CoreMaterial {
      * @param suggest if true {@link #parseMaterial(boolean)} true will be used.
      * @return an ItemStack with the same material (and data value if in older versions.)
      * @see #setType(ItemStack)
-     * @since 1.1.0
      */
     @SuppressWarnings("deprecation")
     public ItemStack parseItem(boolean suggest) {
@@ -1874,7 +1829,6 @@ public enum CoreMaterial {
      *
      * @return the material related to this CoreMaterial based on the server version.
      * @see #parseMaterial(boolean)
-     * @since 1.1.0
      */
     public Material parseMaterial() {
         return parseMaterial(false);
@@ -1886,7 +1840,6 @@ public enum CoreMaterial {
      * @param suggest use a suggested material (from older materials) if the material is added in a later version of Minecraft.
      * @return the material related to this CoreMaterial based on the server version.
      * @see #matchCoreMaterial(String, byte)
-     * @since 1.1.0
      */
     @SuppressWarnings("OptionalAssignedToNull")
     public Material parseMaterial(boolean suggest) {
@@ -1911,7 +1864,6 @@ public enum CoreMaterial {
      * @param suggest if true suggested materials will be considered for old versions.
      * @return a parsed material suitable for the current Minecraft version.
      * @see #parseMaterial(boolean)
-     * @since 1.1.0
      */
     private Material requestOldMaterial(boolean suggest) {
         for (int i = this.legacy.length - 1; i >= 0; i--) {
@@ -1940,7 +1892,6 @@ public enum CoreMaterial {
      *
      * @param item item to check.
      * @return true if the material is the same as the item's material (and data value if on older versions), otherwise false.
-     * @since 1.1.0
      */
     @SuppressWarnings("deprecation")
     public boolean isSimilar(@NonNull ItemStack item) {
@@ -1955,7 +1906,6 @@ public enum CoreMaterial {
      *
      * @return a list of suggested material names.
      * @see #parseMaterial(boolean)
-     * @since 1.1.0
      */
     @NonNull
     public List<String> getSuggestions() {
@@ -1976,7 +1926,6 @@ public enum CoreMaterial {
      * if you're going to parse and use the material later.
      *
      * @return true if the material exists in {@link Material} list.
-     * @since 1.1.0
      */
     public boolean isSupported() {
         int version = this.getMaterialVersion();
@@ -1992,7 +1941,6 @@ public enum CoreMaterial {
      *
      * @return true if the material was newly added, otherwise false.
      * @see #getMaterialVersion()
-     * @since 1.1.0
      */
     public boolean isFromNewSystem() {
         return this.legacy.length != 0 && Integer.parseInt(this.legacy[0].substring(2)) > 13;
