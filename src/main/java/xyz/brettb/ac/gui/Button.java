@@ -21,6 +21,11 @@ public class Button extends Label {
         this.clickHandler = clickHandler;
     }
 
+    public Button(ItemStack item, Dimension size, Dimension position, Consumer<CoreClickEvent> clickHandler) {
+        super(item, size, position);
+        this.clickHandler = clickHandler;
+    }
+
     @Override
     public void onClick(CoreClickEvent e) {
         clickHandler.accept(e);

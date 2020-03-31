@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import xyz.brettb.ac.items.CoreMaterial;
+import xyz.brettb.ac.items.ItemBuilder;
 import xyz.brettb.ac.util.ArrayUtils;
 import xyz.brettb.ac.util.TextUtils;
 
@@ -16,17 +17,16 @@ import java.util.List;
 
 public class Label extends CoreGUIComponent {
 
-    @Getter
-    @Setter
-    private String name;
-
-    @Getter
-    private List<String> lore;
-
     public Label(ItemStack item, Dimension size, Dimension position, String name, String... lore) {
         super (item, size, position);
-        this.name = name;
-        this.lore = Arrays.asList(lore);
+        ItemBuilder itemB = ItemBuilder.of(item);
+        itemB.setDisplayName(TextUtils.colorizeText(name));
+        itemB.setLore(ArrayUtils.colorize(Arrays.asList(lore)));
+        setItem(itemB.build());
+    }
+
+    public Label(ItemStack item, Dimension size, Dimension position) {
+        super (item, size, position);
     }
 
     public static Label background(int x, int y, int width, int height) {
@@ -35,12 +35,7 @@ public class Label extends CoreGUIComponent {
 
     @Override
     public ItemStack simpleRender(Player player, int offsetX, int offsetY) {
-        ItemStack newItem = getItem().clone();
-        ItemMeta meta = newItem.getItemMeta();
-        meta.setDisplayName(TextUtils.colorizeText("&r" + name));
-        meta.setLore(ArrayUtils.colorize(lore));
-        newItem.setItemMeta(meta);
-        return newItem;
+        return getItem();
     }
 
     @Override
@@ -49,10 +44,14 @@ public class Label extends CoreGUIComponent {
     }
 
     private void addLore(String... lore) {
-        ArrayList<String> newLore = new ArrayList<>();
-        newLore.addAll(getLore());
-        newLore.addAll(Arrays.asList(lore));
-        this.lore = Collections.unmodifiableList(newLore);
+        ItemBuilder itemB = ItemBuilder.of(getItem());
+        itemB.addLore(ArrayUtils.colorize(Arrays.asList(lore)));
+        setItem(itemB.build());
+    }
+
+    private void setName(String name) {
+        ItemBuilder itemB = ItemBuilder.of(getItem());
+        itemB.setDisplayName(TextUtils.colorizeText(name));
     }
 
 }

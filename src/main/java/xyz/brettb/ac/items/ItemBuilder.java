@@ -10,6 +10,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Consumer;
@@ -59,6 +60,22 @@ public class ItemBuilder {
 
     public ItemBuilder setLore(String... lore) {
         return mutateMeta(im -> im.setLore(Arrays.asList(lore)));
+    }
+
+    public ItemBuilder setLore(List<String> lore) {
+        return mutateMeta(im -> im.setLore(lore));
+    }
+
+    public ItemBuilder addLore(String... lore) {
+        List<String> newLore = item.getItemMeta().getLore();
+        newLore.addAll(Arrays.asList(lore));
+        return mutateMeta(im -> im.setLore(newLore));
+    }
+
+    public ItemBuilder addLore(List<String> lore) {
+        List<String> newLore = item.getItemMeta().getLore();
+        newLore.addAll(lore);
+        return mutateMeta(im -> im.setLore(newLore));
     }
 
     public ItemBuilder addEnchantment(Enchantment enchant, int level, boolean ignoreRestrictions) {
