@@ -1,10 +1,12 @@
 package xyz.brettb.ac.gui;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
@@ -16,6 +18,8 @@ import java.util.List;
 
 public class CoreGUI implements InventoryHolder {
     private List<CoreGUIComponent> components = new ArrayList<>();
+
+    @Getter(AccessLevel.PROTECTED)
     private JavaPlugin plugin;
 
     @Getter
@@ -80,6 +84,10 @@ public class CoreGUI implements InventoryHolder {
                         player.closeInventory();
                     }
                 });
+    }
+
+    public void onExit(InventoryCloseEvent e) {
+        return;
     }
 
     protected CoreGUI addComponent(CoreGUIComponent comp) {

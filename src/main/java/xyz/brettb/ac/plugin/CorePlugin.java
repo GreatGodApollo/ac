@@ -11,6 +11,8 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import xyz.brettb.ac.commands.CorePluginCommand;
 import xyz.brettb.ac.commands.CorePluginCommandMeta;
+import xyz.brettb.ac.gui.CoreGUIExitListener;
+import xyz.brettb.ac.gui.CoreGUIListener;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -26,6 +28,8 @@ public abstract class CorePlugin extends JavaPlugin {
     @Override
     public final void onEnable() {
         try {
+            registerListener(new CoreGUIListener());
+            registerListener(new CoreGUIExitListener());
             onModuleEnable();
         } catch (Throwable ex) {
             getLogger().severe("Unable to enable the plugin!");

@@ -30,5 +30,4 @@ public class CoreGUIListener implements Listener {
 
         ((CoreGUI) e.getInventory().getHolder()).onClick(e);
     }
-
 }
