@@ -27,7 +27,6 @@ public abstract class CorePlugin extends JavaPlugin {
     @Override
     public final void onEnable() {
         try {
-            registerListener(new CoreGUIListener());
             onModuleEnable();
         } catch (Throwable ex) {
             getLogger().severe("Unable to enable the plugin!");

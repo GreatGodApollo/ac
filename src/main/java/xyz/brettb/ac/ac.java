@@ -4,6 +4,7 @@ import org.bukkit.ChatColor;
 import xyz.brettb.ac.commands.CommandContext;
 import xyz.brettb.ac.commands.CorePluginCommand;
 import xyz.brettb.ac.commands.CorePluginCommandMeta;
+import xyz.brettb.ac.gui.CoreGUIListener;
 import xyz.brettb.ac.plugin.CorePlugin;
 import xyz.brettb.ac.plugin.CorePluginMeta;
 
@@ -12,6 +13,7 @@ public class ac extends CorePlugin {
 
     @Override
     public void onModuleEnable() {
+        registerListener(new CoreGUIListener());
         registerCommand(new ApolloCoreCommand());
     }
 
