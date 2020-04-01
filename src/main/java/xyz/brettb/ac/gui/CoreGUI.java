@@ -86,10 +86,6 @@ public class CoreGUI implements InventoryHolder {
                 });
     }
 
-    public void onExit(InventoryCloseEvent e) {
-        return;
-    }
-
     protected CoreGUI addComponent(CoreGUIComponent comp) {
         if (!comp.getSize().add(comp.getPosition()).fitsInside(size)) {
             return this;
