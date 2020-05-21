@@ -1,5 +1,7 @@
 # ApolloCore
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/d698a649a7684131848ad97b635a7893)](https://app.codacy.com/manual/GreatGodApollo/ac?utm_source=github.com&utm_medium=referral&utm_content=GreatGodApollo/ac&utm_campaign=Badge_Grade_Dashboard)
+
 A Bukkit plugin framework by Brett Bender
 
 This library aims to make writing a plugin quicker and easier.
