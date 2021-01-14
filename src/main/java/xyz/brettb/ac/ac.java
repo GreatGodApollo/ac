@@ -13,7 +13,7 @@ public class ac extends CorePlugin {
 
     @Override
     public void onModuleEnable() {
-        registerListener(new CoreGUIListener());
+        registerListener(new CoreGUIListener(this));
         registerCommand(new ApolloCoreCommand());
     }
 

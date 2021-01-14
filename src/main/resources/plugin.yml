@@ -1,6 +1,6 @@
 main: xyz.brettb.ac.ac
 prefix: AC
-name: ${project.name}
+name: ApolloCore
 version: ${project.version}
 author: GreatGodApollo
 description: Required library for plugins
