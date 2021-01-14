@@ -6,7 +6,7 @@
 
     <groupId>xyz.brettb</groupId>
     <artifactId>ac</artifactId>
-    <version>0.14.0</version>
+    <version>0.15.0</version>
     <name>ApolloCore</name>
 
     <properties>
@@ -34,14 +34,14 @@
         <dependency>
             <groupId>org.bukkit</groupId>
             <artifactId>bukkit</artifactId>
-            <version>1.12.2-R0.1-SNAPSHOT</version>
+            <version>1.13.2-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
 
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.12</version>
+            <version>1.18.16</version>
             <scope>provided</scope>
         </dependency>
 
@@ -49,6 +49,12 @@
             <groupId>org.javatuples</groupId>
             <artifactId>javatuples</artifactId>
             <version>1.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.cryptomorin</groupId>
+            <artifactId>XSeries</artifactId>
+            <version>7.8.0</version>
         </dependency>
     </dependencies>
 

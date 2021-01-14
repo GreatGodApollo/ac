@@ -1,5 +1,6 @@
 package xyz.brettb.ac.items;
 
+import com.cryptomorin.xseries.XMaterial;
 import lombok.NonNull;
 import me.ialistannen.mininbt.ItemNBTUtil;
 import me.ialistannen.mininbt.NBTWrappers;
@@ -26,11 +27,11 @@ public class ItemBuilder {
         return of(new ItemStack(mat));
     }
 
-    public static ItemBuilder of(@NonNull CoreMaterial mat) {
-        if (mat.parseItem(true) == null) {
+    public static ItemBuilder of(@NonNull XMaterial mat) {
+        if (mat.parseItem() == null) {
             return of(new ItemStack(Material.STONE));
         }
-        return of(new ItemStack(Objects.requireNonNull(mat.parseItem(true))));
+        return of(new ItemStack(Objects.requireNonNull(mat.parseItem())));
     }
 
     public static ItemBuilder of(@NonNull ItemStack itemStack) {

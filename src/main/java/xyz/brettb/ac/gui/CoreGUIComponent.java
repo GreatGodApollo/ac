@@ -1,11 +1,11 @@
 package xyz.brettb.ac.gui;
 
+import com.cryptomorin.xseries.XMaterial;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import xyz.brettb.ac.items.CoreMaterial;
 
 public abstract class CoreGUIComponent {
 
@@ -27,7 +27,7 @@ public abstract class CoreGUIComponent {
     private Dimension position;
 
     protected CoreGUIComponent(@NonNull ItemStack item, @NonNull Dimension size, @NonNull Dimension position) {
-        if (item.getType() == CoreMaterial.AIR.parseMaterial()) {
+        if (item.getType() == XMaterial.AIR.parseMaterial()) {
             throw new IllegalArgumentException("Item cannot be AIR!");
         }
         this.item = item;
