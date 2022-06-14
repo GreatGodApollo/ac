@@ -96,6 +96,7 @@ public abstract class CorePluginCommand implements CommandExecutor, TabCompleter
                 ctx.getSender().sendMessage(superHelpCommand.getPlugin().getChatPrefix() + s);
             }
         }, false));
+        this.subCommands.get("help").getValue0().setSuperCommand(this);
     }
 
     public final boolean onCommand(final CommandSender sender, Command command, String alias, final String[] args) {
